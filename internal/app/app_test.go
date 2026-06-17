@@ -79,6 +79,46 @@ func TestRunHelpNewShowsDetailedHelp(t *testing.T) {
 	mustContain(t, text, `memadr new bug "認証状態が壊れる"`)
 }
 
+func TestRunHelpListShowsOptionDetailsAndValues(t *testing.T) {
+	t.Parallel()
+
+	dir := t.TempDir()
+	var out bytes.Buffer
+
+	if err := Run([]string{"help", "list"}, dir, &out, &out); err != nil {
+		t.Fatalf("Run returned error: %v", err)
+	}
+
+	text := out.String()
+	mustContain(t, text, "Options:")
+	mustContain(t, text, "--type <TYPE>")
+	mustContain(t, text, "値: bug, prob, adr, chg, rev, sol, sup")
+	mustContain(t, text, "--status <STATUS>")
+	mustContain(t, text, "値: OPEN, INVESTIGATING, UNRESOLVED")
+	mustContain(t, text, "--future <FUTURE>")
+	mustContain(t, text, "値: ignore, watch, reusable")
+	mustContain(t, text, "--area <AREA>")
+	mustContain(t, text, "任意のArea文字列")
+}
+
+func TestRunHelpCloseShowsOptionKinds(t *testing.T) {
+	t.Parallel()
+
+	dir := t.TempDir()
+	var out bytes.Buffer
+
+	if err := Run([]string{"help", "close"}, dir, &out, &out); err != nil {
+		t.Fatalf("Run returned error: %v", err)
+	}
+
+	text := out.String()
+	mustContain(t, text, "Options:")
+	mustContain(t, text, "--verified")
+	mustContain(t, text, "値なし")
+	mustContain(t, text, "--resolved-by <CHG-ID>")
+	mustContain(t, text, "値: `CHG-001` のような変更ID")
+}
+
 func TestRunNewBugCreatesFirstRecord(t *testing.T) {
 	t.Parallel()
 

@@ -5,10 +5,10 @@ bin := if os_family() == "windows" { "memadr.exe" } else { "memadr" }
 bin_path := if os_family() == "windows" { ".\\" + bin } else { "./" + bin }
 clean_cmd := if os_family() == "windows" { "if (Test-Path '" + bin + "') { Remove-Item '" + bin + "' }" } else { "rm -f '" + bin + "'" }
 
-default: help
+default: _help
 
 # 利用可能なレシピを表示
-help:
+_help:
     @just --list --unsorted
 
 # memadrバイナリをビルド

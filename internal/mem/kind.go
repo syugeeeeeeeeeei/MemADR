@@ -1,5 +1,7 @@
 package mem
 
+import "strings"
+
 type Kind struct {
 	Name   string
 	Desc   string
@@ -18,6 +20,7 @@ var kindList = []Kind{
 }
 
 var kinds = buildKindMap()
+var kindByPrefix = buildPrefixMap()
 
 func buildKindMap() map[string]Kind {
 	m := make(map[string]Kind, len(kindList))
@@ -27,8 +30,21 @@ func buildKindMap() map[string]Kind {
 	return m
 }
 
+func buildPrefixMap() map[string]Kind {
+	m := make(map[string]Kind, len(kindList))
+	for _, kind := range kindList {
+		m[kind.Prefix] = kind
+	}
+	return m
+}
+
 func ParseKind(name string) (Kind, bool) {
 	kind, ok := kinds[name]
+	return kind, ok
+}
+
+func KindByPrefix(prefix string) (Kind, bool) {
+	kind, ok := kindByPrefix[strings.ToUpper(prefix)]
 	return kind, ok
 }
 
@@ -50,4 +66,25 @@ func Dirs() []string {
 		"memory/supersessions",
 		"memory/generated",
 	}
+}
+
+func Statuses() []string {
+	return []string{
+		"OPEN",
+		"INVESTIGATING",
+		"UNRESOLVED",
+		"PROPOSED",
+		"ACCEPTED",
+		"FIXED",
+		"VERIFIED",
+		"SHIPPED",
+		"CLOSED",
+		"SUPERSEDED",
+		"ARCHIVED",
+		"ACTIVE",
+	}
+}
+
+func FutureValues() []string {
+	return []string{"ignore", "watch", "reusable"}
 }
