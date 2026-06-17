@@ -3,6 +3,7 @@ package app
 import (
 	"fmt"
 	"io"
+	"path/filepath"
 	"strings"
 	"text/tabwriter"
 
@@ -31,6 +32,9 @@ func Run(args []string, wd string, out io.Writer, errOut io.Writer) error {
 
 func runInit(_ []string, wd string, out io.Writer, _ io.Writer) error {
 	if err := mem.Init(wd); err != nil {
+		return err
+	}
+	if err := mem.WriteFileIfAbsent(filepath.Join(wd, mem.WorkflowGuideFile), template.RenderWorkflowGuide()); err != nil {
 		return err
 	}
 

@@ -68,3 +68,13 @@ func nextNum(dir string, prefix string) (int, error) {
 func WriteFile(path string, body string) error {
 	return os.WriteFile(path, []byte(body), 0o644)
 }
+
+func WriteFileIfAbsent(path string, body string) error {
+	if _, err := os.Stat(path); err == nil {
+		return nil
+	} else if !os.IsNotExist(err) {
+		return err
+	}
+
+	return WriteFile(path, body)
+}

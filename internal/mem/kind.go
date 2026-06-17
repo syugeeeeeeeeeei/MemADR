@@ -2,6 +2,8 @@ package mem
 
 import "strings"
 
+const WorkflowGuideFile = "MEMADR_WORKFLOW.md"
+
 type Kind struct {
 	Name   string
 	Desc   string

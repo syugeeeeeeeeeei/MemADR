@@ -44,6 +44,7 @@ func commandDefs() []commandDef {
 			Details: []string{
 				"引数なしでは全体ヘルプを表示する",
 				"`memadr help new` のように個別コマンドの詳細も表示できる",
+				"ワークフローは `" + mem.WorkflowGuideFile + "` を参照する",
 			},
 			Args: []inputDef{
 				{
@@ -88,6 +89,7 @@ func commandDefs() []commandDef {
 			Details: []string{
 				"既存ディレクトリは壊さずに不足分だけ作成する",
 				"`memory/generated/` も同時に用意する",
+				"`" + mem.WorkflowGuideFile + "` が無ければ生成する",
 			},
 			Examples: []string{
 				"memadr init",
@@ -102,6 +104,7 @@ func commandDefs() []commandDef {
 				"種別ごとに連番IDを自動採番する",
 				"タイトルを省略すると `タイトル未設定` を使う",
 				"作成先ディレクトリは種別から自動で決まる",
+				"記録の流れに迷ったら `" + mem.WorkflowGuideFile + "` を参照する",
 			},
 			Args: []inputDef{
 				{
@@ -308,6 +311,11 @@ func renderGeneralHelp() string {
 	b.WriteString("Record types:\n")
 	b.WriteString(renderKindTable())
 	b.WriteString("\n")
+
+	b.WriteString("Workflow guide:\n")
+	b.WriteString("  ")
+	b.WriteString(mem.WorkflowGuideFile)
+	b.WriteString("\n\n")
 
 	b.WriteString("Examples:\n")
 	b.WriteString("  memadr help new\n")

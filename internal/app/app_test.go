@@ -40,6 +40,42 @@ func TestRunInitCreatesMemoryDirs(t *testing.T) {
 			t.Fatalf("%q is not a directory", path)
 		}
 	}
+
+	guide := filepath.Join(dir, "MEMADR_WORKFLOW.md")
+	body, err := os.ReadFile(guide)
+	if err != nil {
+		t.Fatalf("os.ReadFile(%q) error: %v", guide, err)
+	}
+
+	text := string(body)
+	mustContain(t, text, "MemADR Workflow Guide")
+	mustContain(t, text, "人間向け導線")
+	mustContain(t, text, "LLM向け導線")
+	mustContain(t, text, "memadr init")
+	mustContain(t, text, "memadr new bug")
+}
+
+func TestRunInitDoesNotOverwriteExistingGuide(t *testing.T) {
+	t.Parallel()
+
+	dir := t.TempDir()
+	guide := filepath.Join(dir, "MEMADR_WORKFLOW.md")
+	if err := os.WriteFile(guide, []byte("custom guide\n"), 0o644); err != nil {
+		t.Fatalf("os.WriteFile(%q) error: %v", guide, err)
+	}
+
+	var out bytes.Buffer
+	if err := Run([]string{"init"}, dir, &out, &out); err != nil {
+		t.Fatalf("Run returned error: %v", err)
+	}
+
+	body, err := os.ReadFile(guide)
+	if err != nil {
+		t.Fatalf("os.ReadFile(%q) error: %v", guide, err)
+	}
+	if string(body) != "custom guide\n" {
+		t.Fatalf("guide was overwritten: %q", string(body))
+	}
 }
 
 func TestRunWithoutArgsShowsHelp(t *testing.T) {
@@ -59,6 +95,8 @@ func TestRunWithoutArgsShowsHelp(t *testing.T) {
 	mustContain(t, text, "memadr new <type> [title]")
 	mustContain(t, text, "Record types:")
 	mustContain(t, text, "BUG")
+	mustContain(t, text, "Workflow guide:")
+	mustContain(t, text, "MEMADR_WORKFLOW.md")
 }
 
 func TestRunHelpNewShowsDetailedHelp(t *testing.T) {
@@ -77,6 +115,7 @@ func TestRunHelpNewShowsDetailedHelp(t *testing.T) {
 	mustContain(t, text, "bug")
 	mustContain(t, text, "adr")
 	mustContain(t, text, `memadr new bug "認証状態が壊れる"`)
+	mustContain(t, text, "MEMADR_WORKFLOW.md")
 }
 
 func TestRunHelpListShowsOptionDetailsAndValues(t *testing.T) {
