@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 
 	"memadr/internal/release"
 )
@@ -38,7 +39,14 @@ func runBuild(args []string) {
 		fail(err.Error())
 	}
 
-	if err := goBuild(*goBin, *out, *target, meta); err != nil {
+	root, err := repoRoot()
+	if err != nil {
+		fail(err.Error())
+	}
+
+	outPath := absPath(root, *out)
+
+	if err := goBuild(root, *goBin, outPath, *target, meta); err != nil {
 		fail(err.Error())
 	}
 }
@@ -63,7 +71,13 @@ func runRelease(args []string) {
 	if err := release.EnsureTagMissing(*version); err != nil {
 		fail(err.Error())
 	}
-	if err := runCmd(*goBin, "test", "./..."); err != nil {
+
+	root, err := repoRoot()
+	if err != nil {
+		fail(err.Error())
+	}
+
+	if err := runCmd(root, *goBin, "test", "./..."); err != nil {
 		fail(err.Error())
 	}
 
@@ -71,7 +85,8 @@ func runRelease(args []string) {
 	if err != nil {
 		fail(err.Error())
 	}
-	if err := goBuild(*goBin, *out, *target, meta); err != nil {
+	outPath := absPath(root, *out)
+	if err := goBuild(root, *goBin, outPath, *target, meta); err != nil {
 		fail(err.Error())
 	}
 	if err := release.CreateTag(*version); err != nil {
@@ -80,10 +95,6 @@ func runRelease(args []string) {
 	if err := release.PushRelease(*version); err != nil {
 		fail(err.Error())
 	}
-}
-
-func goBuild(goBin string, out string, target string, meta release.Meta) error {
-	return runCmd(goBin, "build", "-ldflags", release.Ldflags(meta), "-o", out, target)
 }
 
 func runDist(args []string) {
@@ -98,24 +109,35 @@ func runDist(args []string) {
 		fail("dist version is required")
 	}
 
+	root, err := repoRoot()
+	if err != nil {
+		fail(err.Error())
+	}
+
 	meta, err := release.ReleaseMeta(*version)
 	if err != nil {
 		fail(err.Error())
 	}
-	if err := os.MkdirAll(*outDir, 0o755); err != nil {
+	distDir := absPath(root, *outDir)
+	if err := os.MkdirAll(distDir, 0o755); err != nil {
 		fail(err.Error())
 	}
 
 	for _, item := range release.Targets() {
-		out := *outDir + string(os.PathSeparator) + release.BinaryName(item)
-		if err := goBuildFor(*goBin, out, *target, meta, item); err != nil {
+		out := filepath.Join(distDir, release.BinaryName(item))
+		if err := goBuildFor(root, *goBin, out, *target, meta, item); err != nil {
 			fail(err.Error())
 		}
 	}
 }
 
-func goBuildFor(goBin string, out string, target string, meta release.Meta, targetInfo release.Target) error {
+func goBuild(root string, goBin string, out string, target string, meta release.Meta) error {
+	return runCmd(root, goBin, "build", "-ldflags", release.Ldflags(meta), "-o", out, target)
+}
+
+func goBuildFor(root string, goBin string, out string, target string, meta release.Meta, targetInfo release.Target) error {
 	cmd := exec.Command(goBin, "build", "-ldflags", release.Ldflags(meta), "-o", out, target)
+	cmd.Dir = root
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.Env = append(os.Environ(),
@@ -129,8 +151,9 @@ func goBuildFor(goBin string, out string, target string, meta release.Meta, targ
 	return nil
 }
 
-func runCmd(name string, args ...string) error {
+func runCmd(dir string, name string, args ...string) error {
 	cmd := exec.Command(name, args...)
+	cmd.Dir = dir
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
@@ -149,4 +172,26 @@ func binaryName() string {
 func fail(msg string) {
 	fmt.Fprintln(os.Stderr, msg)
 	os.Exit(1)
+}
+
+func repoRoot() (string, error) {
+	out, err := exec.Command("git", "rev-parse", "--show-toplevel").CombinedOutput()
+	if err != nil {
+		return "", fmt.Errorf("git rev-parse --show-toplevel failed: %s", string(out))
+	}
+	return filepath.Clean(stringTrim(string(out))), nil
+}
+
+func absPath(root string, path string) string {
+	if filepath.IsAbs(path) {
+		return path
+	}
+	return filepath.Join(root, path)
+}
+
+func stringTrim(s string) string {
+	for len(s) > 0 && (s[len(s)-1] == '\n' || s[len(s)-1] == '\r') {
+		s = s[:len(s)-1]
+	}
+	return s
 }
