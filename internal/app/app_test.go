@@ -56,7 +56,7 @@ func TestRunInitCreatesMemoryDirs(t *testing.T) {
 	outText := out.String()
 	mustContain(t, outText, "initialized memory/")
 	mustContain(t, outText, "LLMがMemADRを使用するために、以下をAGENTS.mdに貼り付けてください。")
-	mustContain(t, outText, "# AGENTS.md")
+	mustContain(t, outText, "## MemADR運用ポリシー")
 	mustContain(t, outText, "作業するエージェントは、必ず `MEMADR_WORKFLOW.md` を読み、その内容に従うこと。")
 }
 
