@@ -47,7 +47,7 @@ memadr index
 LLMがMemADRを使用するために、以下を `AGENTS.md` に貼り付けてください。
 
 ```md
-# AGENTS.md
+## MemADR運用ポリシー
 
 このリポジトリでは、MemADRを開発判断メモリとして使用する。
 
