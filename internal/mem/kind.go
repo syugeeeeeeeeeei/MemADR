@@ -2,23 +2,40 @@ package mem
 
 type Kind struct {
 	Name   string
+	Desc   string
 	Prefix string
 	Dir    string
 }
 
-var kinds = map[string]Kind{
-	"bug":  {Name: "bug", Prefix: "BUG", Dir: "bugs"},
-	"prob": {Name: "prob", Prefix: "PROB", Dir: "problems"},
-	"adr":  {Name: "adr", Prefix: "ADR", Dir: "decisions"},
-	"chg":  {Name: "chg", Prefix: "CHG", Dir: "changes"},
-	"rev":  {Name: "rev", Prefix: "REV", Dir: "reversions"},
-	"sol":  {Name: "sol", Prefix: "SOL", Dir: "solutions"},
-	"sup":  {Name: "sup", Prefix: "SUP", Dir: "supersessions"},
+var kindList = []Kind{
+	{Name: "bug", Desc: "バグ、不具合、失敗", Prefix: "BUG", Dir: "bugs"},
+	{Name: "prob", Desc: "根本問題、構造的課題", Prefix: "PROB", Dir: "problems"},
+	{Name: "adr", Desc: "設計判断", Prefix: "ADR", Dir: "decisions"},
+	{Name: "chg", Desc: "実際に行った変更", Prefix: "CHG", Dir: "changes"},
+	{Name: "rev", Desc: "巻き戻し、撤回", Prefix: "REV", Dir: "reversions"},
+	{Name: "sol", Desc: "再利用可能な解決策", Prefix: "SOL", Dir: "solutions"},
+	{Name: "sup", Desc: "過去判断や実装の無効化", Prefix: "SUP", Dir: "supersessions"},
+}
+
+var kinds = buildKindMap()
+
+func buildKindMap() map[string]Kind {
+	m := make(map[string]Kind, len(kindList))
+	for _, kind := range kindList {
+		m[kind.Name] = kind
+	}
+	return m
 }
 
 func ParseKind(name string) (Kind, bool) {
 	kind, ok := kinds[name]
 	return kind, ok
+}
+
+func Kinds() []Kind {
+	out := make([]Kind, len(kindList))
+	copy(out, kindList)
+	return out
 }
 
 func Dirs() []string {

@@ -42,6 +42,43 @@ func TestRunInitCreatesMemoryDirs(t *testing.T) {
 	}
 }
 
+func TestRunWithoutArgsShowsHelp(t *testing.T) {
+	t.Parallel()
+
+	dir := t.TempDir()
+	var out bytes.Buffer
+
+	if err := Run(nil, dir, &out, &out); err != nil {
+		t.Fatalf("Run returned error: %v", err)
+	}
+
+	text := out.String()
+	mustContain(t, text, "MemADR")
+	mustContain(t, text, "Usage:")
+	mustContain(t, text, "memadr init")
+	mustContain(t, text, "memadr new <type> [title]")
+	mustContain(t, text, "Record types:")
+	mustContain(t, text, "BUG")
+}
+
+func TestRunHelpNewShowsDetailedHelp(t *testing.T) {
+	t.Parallel()
+
+	dir := t.TempDir()
+	var out bytes.Buffer
+
+	if err := Run([]string{"help", "new"}, dir, &out, &out); err != nil {
+		t.Fatalf("Run returned error: %v", err)
+	}
+
+	text := out.String()
+	mustContain(t, text, "memadr new <type> [title]")
+	mustContain(t, text, "Supported types:")
+	mustContain(t, text, "bug")
+	mustContain(t, text, "adr")
+	mustContain(t, text, `memadr new bug "認証状態が壊れる"`)
+}
+
 func TestRunNewBugCreatesFirstRecord(t *testing.T) {
 	t.Parallel()
 
