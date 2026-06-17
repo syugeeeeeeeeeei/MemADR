@@ -119,6 +119,21 @@ func TestRunHelpCloseShowsOptionKinds(t *testing.T) {
 	mustContain(t, text, "値: `CHG-001` のような変更ID")
 }
 
+func TestRunVersionShowsBuildVersion(t *testing.T) {
+	t.Parallel()
+
+	dir := t.TempDir()
+	var out bytes.Buffer
+
+	if err := Run([]string{"version"}, dir, &out, &out); err != nil {
+		t.Fatalf("Run returned error: %v", err)
+	}
+
+	text := out.String()
+	mustContain(t, text, "v")
+	mustNotContain(t, text, "dirty:")
+}
+
 func TestRunNewBugCreatesFirstRecord(t *testing.T) {
 	t.Parallel()
 

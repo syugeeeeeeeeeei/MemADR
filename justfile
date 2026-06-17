@@ -13,11 +13,19 @@ _help:
 
 # memadrバイナリをビルド
 build:
-    {{ go_bin }} build -o {{ bin }} ./cmd/memadr
+    {{ go_bin }} run ./cmd/buildctl build -o {{ bin }}
 
 # Goテストを実行
 test:
     {{ go_bin }} test ./...
+
+# リリース用のタグ作成とビルドをまとめて実行
+release version:
+    {{ go_bin }} run ./cmd/buildctl release -version {{ version }} -o {{ bin }}
+
+# 配布用のマルチプラットフォームバイナリを作成
+dist version:
+    {{ go_bin }} run ./cmd/buildctl dist -version {{ version }} -out-dir dist
 
 # go runでmemoryを初期化
 init:

@@ -61,6 +61,27 @@ func commandDefs() []commandDef {
 			Run: runHelp,
 		},
 		{
+			Name:    "version",
+			Summary: "アプリのバージョン情報を表示する",
+			Usage:   "memadr version [--verbose]",
+			Details: []string{
+				"既定ではバージョン文字列だけを表示する",
+				"リリースビルドではタグ版、通常ビルドでは最新タグ基準の dev 版を表示する",
+			},
+			Options: []optionDef{
+				{
+					Name:      "--verbose",
+					Summary:   "commit、build日時、作業ツリー状態も表示する",
+					ValueNote: "値なし",
+				},
+			},
+			Examples: []string{
+				"memadr version",
+				"memadr version --verbose",
+			},
+			Run: runVersion,
+		},
+		{
 			Name:    "init",
 			Summary: "memory/ の標準ディレクトリ構成を作成する",
 			Usage:   "memadr init",

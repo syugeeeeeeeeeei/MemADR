@@ -6,6 +6,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
+	"memadr/internal/buildinfo"
 	"memadr/internal/mem"
 	"memadr/internal/record"
 	"memadr/internal/template"
@@ -172,6 +173,22 @@ func runClose(args []string, wd string, out io.Writer, _ io.Writer) error {
 	}
 
 	_, err = fmt.Fprintf(out, "updated %s\n", rec.Path)
+	return err
+}
+
+func runVersion(args []string, _ string, out io.Writer, _ io.Writer) error {
+	info := buildinfo.Current()
+	text := buildinfo.Render(info)
+	for _, arg := range args {
+		switch arg {
+		case "--verbose":
+			text = buildinfo.RenderVerbose(info)
+		default:
+			return fmt.Errorf("unknown option: %s", arg)
+		}
+	}
+
+	_, err := io.WriteString(out, text)
 	return err
 }
 
