@@ -56,9 +56,9 @@ func TestRunInitCreatesMemoryDirs(t *testing.T) {
 
 	outText := out.String()
 	mustContain(t, outText, "initialized memory/")
-	mustContain(t, outText, "AGENTS.md")
-	mustContain(t, outText, "## MemADR Policy")
-	mustContain(t, outText, "Use `memadr` for development knowledge records.")
+	mustContain(t, outText, "LLMがMemADRを使用するために、以下をAGENTS.mdに貼り付けてください。")
+	mustContain(t, outText, "## MemADR運用ポリシー")
+	mustContain(t, outText, "開発知識レコードの管理には `memadr` を使用する。")
 }
 
 func TestRunInitDoesNotOverwriteExistingGuide(t *testing.T) {

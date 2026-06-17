@@ -4,19 +4,19 @@ import "strings"
 
 func RenderAgentsSnippet() string {
 	lines := []string{
-		"## MemADR Policy",
+		"## MemADR運用ポリシー",
 		"",
-		"Use `memadr` for development knowledge records.",
+		"開発知識レコードの管理には `memadr` を使用する。",
 		"",
-		"- Use Japanese for memory records by default.",
-		"- Keep `memory/` records short and outcome-focused.",
-		"- Do not write work logs under `memory/`.",
-		"- Before creating a new BUG, PROB, ADR, CHG, REV, SOL, or SUP record, search existing records with `memadr search` and `memadr related`.",
-		"- When starting a repository, run `memadr init` and read `MEMADR_WORKFLOW.md`.",
-		"- Create or update memory records when a bug, structural problem, architectural decision, change, rollback, reusable solution, or supersession is found.",
-		"- Use `memadr check` before finishing work when records were added or updated.",
-		"- Use `memadr index` to regenerate aggregate files instead of editing `memory/generated/` manually.",
-		"- Treat each record file as the source of truth for its own status.",
+		"- `memory/` 配下のレコードは原則として日本語で記述する。",
+		"- `memory/` のレコードは短く、結果と判断が分かる内容を優先する。",
+		"- `memory/` に作業ログを書かない。",
+		"- BUG、PROB、ADR、CHG、REV、SOL、SUP を新規作成する前に、`memadr search` と `memadr related` で既存レコードを確認する。",
+		"- リポジトリ開始時は `memadr init` を実行し、`MEMADR_WORKFLOW.md` を読む。",
+		"- バグ、構造問題、設計判断、変更、巻き戻し、再利用可能な解決策、無効化が見つかったら、対応するレコードを作成または更新する。",
+		"- レコードを追加または更新した作業では、完了前に `memadr check` を実行する。",
+		"- `memory/generated/` は手編集せず、`memadr index` で再生成する。",
+		"- 各レコードファイルの状態は、そのファイル自身を正本として扱う。",
 	}
 
 	return strings.Join(lines, "\n")
