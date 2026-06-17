@@ -48,17 +48,16 @@ func TestRunInitCreatesMemoryDirs(t *testing.T) {
 	}
 
 	text := string(body)
-	mustContain(t, text, "MemADR Workflow Guide")
-	mustContain(t, text, "人間向け導線")
-	mustContain(t, text, "LLM向け導線")
-	mustContain(t, text, "memadr init")
-	mustContain(t, text, "memadr new bug")
+	mustContain(t, text, "# MEMADR_WORKFLOW.md")
+	mustContain(t, text, "## 作業開始時の確認")
+	mustContain(t, text, "memadr list --status OPEN")
+	mustContain(t, text, "## 最重要ルール")
 
 	outText := out.String()
 	mustContain(t, outText, "initialized memory/")
 	mustContain(t, outText, "LLMがMemADRを使用するために、以下をAGENTS.mdに貼り付けてください。")
-	mustContain(t, outText, "## MemADR運用ポリシー")
-	mustContain(t, outText, "まず `MEMADR_WORKFLOW.md` を確認し、その運用に従って開発知識レコードの管理には `memadr` を使用する。")
+	mustContain(t, outText, "# AGENTS.md")
+	mustContain(t, outText, "作業するエージェントは、必ず `MEMADR_WORKFLOW.md` を読み、その内容に従うこと。")
 }
 
 func TestRunInitDoesNotOverwriteExistingGuide(t *testing.T) {

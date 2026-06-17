@@ -14,7 +14,8 @@ func TestReadmeContainsAgentsSnippet(t *testing.T) {
 	}
 
 	want := "```md\n" + RenderAgentsSnippet() + "\n```"
-	if !strings.Contains(string(body), want) {
+	got := strings.ReplaceAll(string(body), "\r\n", "\n")
+	if !strings.Contains(got, want) {
 		t.Fatalf("README.md does not contain the AGENTS snippet block")
 	}
 }

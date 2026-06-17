@@ -4,7 +4,7 @@ import "strings"
 
 func RenderAgentsSnippet() string {
 	lines := []string{
-		"# AGENTS.md",
+		"## MemADR運用ポリシー",
 		"",
 		"このリポジトリでは、MemADRを開発判断メモリとして使用する。",
 		"",
