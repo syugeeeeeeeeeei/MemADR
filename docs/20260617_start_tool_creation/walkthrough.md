@@ -13,11 +13,13 @@
 - `internal/mem` にディレクトリ初期化、種別定義、採番、ファイル保存を分離した
 - `internal/template` に種別ごとのMarkdownテンプレート生成を分離した
 - `internal/app/app_test.go` で `init` と `new` の期待動作を先に固定し、その後に実装した
+- `Makefile` を追加し、ビルド、テスト、`init`、`new bug`、`new adr` をタスクとして実行できるようにした
 - `memory/decisions/ADR-001.md` と `memory/changes/CHG-001.md` を追加し、この開発自体の判断と変更を記録した
 
 ## 確認結果
 
 - ローカル展開したGoで `go test ./...` を実行し、全テストが通過した
+- `Makefile` 経由でも同等のビルドと実行ができる構成にした
 
 ## 今回未着手
 
