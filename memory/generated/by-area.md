@@ -20,3 +20,5 @@
 - CHG-007 | SHIPPED | - | GitHub Actions経由の配布リリース導線を追加した
 - CHG-008 | SHIPPED | - | releaseの既存タグ再配置動作を追加した
 - CHG-009 | SHIPPED | - | initでワークフロー説明書を生成するようにした
+- CHG-010 | SHIPPED | - | READMEを追加した
+- CHG-011 | SHIPPED | - | READMEとinit出力へAGENTS.md追記用の指示を追加した

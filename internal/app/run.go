@@ -38,7 +38,7 @@ func runInit(_ []string, wd string, out io.Writer, _ io.Writer) error {
 		return err
 	}
 
-	_, err := fmt.Fprintln(out, "initialized memory/")
+	_, err := fmt.Fprintf(out, "initialized memory/\n\nAdd this snippet to AGENTS.md:\n\n```md\n%s\n```\n", template.RenderAgentsSnippet())
 	return err
 }
 
