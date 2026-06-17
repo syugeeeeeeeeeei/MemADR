@@ -1,4 +1,4 @@
 .tools/
 dist/
-memadr.exe
-memadr
+/memadr.exe
+/memadr
