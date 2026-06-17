@@ -7,3 +7,5 @@
 - ADR-004 | ACCEPTED | - | ヘルプの引数とオプションを定義ベースで描画する
 - ADR-005 | ACCEPTED | - | バージョン正本をGit tagとリリース導線へ集約する
 - ADR-006 | ACCEPTED | - | GitHub Release生成をタグpush起点のActionsへ委譲する
+- ADR-007 | ACCEPTED | - | release再実行時は既存タグをHEADへ再配置する
+- ADR-008 | ACCEPTED | - | initでワークフロー案内を同梱する
