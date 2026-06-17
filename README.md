@@ -4,6 +4,16 @@ MemADR は、LLM と人間のために開発知識レコードを短い Markdown
 
 作業ログそのものではなく、次回の開発判断に必要な問題、設計判断、変更、解決策、無効化された前提だけを `memory/` 配下へ残します。
 
+## Linux インストール
+
+最新の Linux 向けバイナリは、リリース添付のインストーラスクリプトから導入できます。
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/syugeeeeeeeeeei/MemADR/main/scripts/memadr-install.sh | sh
+```
+
+既定では `/usr/local/bin` が書き込み可能ならそこへ、そうでなければ `~/.local/bin` へ `memadr` を配置します。現状の対象アーキテクチャは Linux `x86_64` / `amd64` です。版を固定したい場合は `sh -s -- -v v0.1.0` を付けてください。
+
 ## 目的
 
 - LLM に渡すコンテキスト量を減らす
@@ -110,12 +120,13 @@ memory/
 - `just release v0.1.0` で release 導線を実行します
 - GitHub Actions は `v*` タグ push を契機にマルチプラットフォームバイナリを作成し、GitHub Release へ公開します
 
-配布対象は次の 4 種です。
+配布対象は次の 5 種です。
 
 - `memadr_windows_amd64.exe`
 - `memadr_darwin_amd64`
 - `memadr_darwin_arm64`
 - `memadr_linux_amd64`
+- `memadr-install.sh`
 
 ## 開発
 

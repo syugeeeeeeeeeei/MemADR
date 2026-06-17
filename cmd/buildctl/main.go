@@ -126,6 +126,9 @@ func runDist(args []string) {
 			fail(err.Error())
 		}
 	}
+	if _, err := release.WriteInstallScript(distDir, release.DefaultRepo); err != nil {
+		fail(err.Error())
+	}
 }
 
 func goBuild(root string, goBin string, out string, target string, meta release.Meta) error {

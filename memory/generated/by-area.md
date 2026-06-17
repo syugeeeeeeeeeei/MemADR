@@ -22,3 +22,4 @@
 - CHG-009 | SHIPPED | - | initでワークフロー説明書を生成するようにした
 - CHG-010 | SHIPPED | - | READMEを追加した
 - CHG-011 | SHIPPED | - | READMEとinit出力へAGENTS.md追記用の指示を追加した
+- CHG-012 | SHIPPED | - | Linux向けインストーラスクリプトを配布物へ追加した
