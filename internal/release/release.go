@@ -98,14 +98,6 @@ func EnsureClean() error {
 	return nil
 }
 
-func EnsureTagMissing(version string) error {
-	err := exec.Command("git", "rev-parse", "--verify", version).Run()
-	if err == nil {
-		return fmt.Errorf("tag already exists: %s", version)
-	}
-	return nil
-}
-
 func CreateTag(version string) error {
 	cmd := exec.Command("git", "tag", "-a", version, "-m", "release "+version)
 	out, err := cmd.CombinedOutput()
@@ -115,11 +107,20 @@ func CreateTag(version string) error {
 	return nil
 }
 
+func ReplaceTag(version string) error {
+	cmd := exec.Command("git", "tag", "-fa", version, "-m", "release "+version, "HEAD")
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("git retag failed: %s", strings.TrimSpace(string(out)))
+	}
+	return nil
+}
+
 func PushRelease(version string) error {
 	if _, err := git("push", "origin", "HEAD"); err != nil {
 		return err
 	}
-	if _, err := git("push", "origin", version); err != nil {
+	if _, err := git("push", "origin", "refs/tags/"+version, "--force"); err != nil {
 		return err
 	}
 	return nil

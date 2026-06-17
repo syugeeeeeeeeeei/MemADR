@@ -68,9 +68,6 @@ func runRelease(args []string) {
 	if err := release.EnsureClean(); err != nil {
 		fail(err.Error())
 	}
-	if err := release.EnsureTagMissing(*version); err != nil {
-		fail(err.Error())
-	}
 
 	root, err := repoRoot()
 	if err != nil {
@@ -89,7 +86,7 @@ func runRelease(args []string) {
 	if err := goBuild(root, *goBin, outPath, *target, meta); err != nil {
 		fail(err.Error())
 	}
-	if err := release.CreateTag(*version); err != nil {
+	if err := release.ReplaceTag(*version); err != nil {
 		fail(err.Error())
 	}
 	if err := release.PushRelease(*version); err != nil {
